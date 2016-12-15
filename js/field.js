@@ -10,7 +10,7 @@ window.carbon = window.carbon || {};
 
 	/*
 	|--------------------------------------------------------------------------
-	| FIELD_NAME Field MODEL
+	| Icon Field MODEL
 	|--------------------------------------------------------------------------
 	|
 	| This class represents the model for the field.
@@ -22,58 +22,16 @@ window.carbon = window.carbon || {};
 	|  - access control
 	|
 	*/
-	carbon.fields.Model.FIELD_NAME = carbon.fields.Model.extend({
-		/*
-		// Set some default values if need. They will be stored in the model attributes.
-		defaults: {
-			'options': []
-		},
-		*/
-
-		initialize: function() {
-			carbon.fields.Model.prototype.initialize.apply(this);  // do not delete
-
-			// Model data manipulations can be done here. For example:
-
-			/*
-			var _this = this;
-			var value = this.get('value');
-			var options = this.get('options') || [];
-
-			// If no value, set the first option as value
-			if (!value) {
-				_.each(options, function(option) {
-					_this.set('value', option.value);
-					return false;
-				});
-			}
-			*/
-
-		},
-
-		/*
-		 * The validate method is an internal Backbone method.
-		 * It will check if the field model data is valid.
-		 * 
-		 * @see http://backbonejs.org/#Model-validate
-		 */
-		/*
-		validate: function(attrs, options) {
-			var hasErrors = false;
-
-			if (!attrs.value) {
-				hasErrors = true;
-			}
-
-			return hasErrors;
-		}
-		*/
+	carbon.fields.Model.Icon = carbon.fields.Model.extend({
+		defaults: _.extend({}, carbon.fields.Model.prototype.defaults, {
+			'value': ''
+		})
 	});
 
 
 	/*
 	|--------------------------------------------------------------------------
-	| FIELD_NAME Field VIEW
+	| Icon Field VIEW
 	|--------------------------------------------------------------------------
 	|
 	| Holds the field DOM interactions (rendering, error state, etc..).
@@ -86,48 +44,104 @@ window.carbon = window.carbon || {};
 	| @holder:  carbon.views[id]
 	|
 	*/
-	carbon.fields.View.FIELD_NAME = carbon.fields.View.extend({
-		/*
+	carbon.fields.View.Icon = carbon.fields.View.extend({
 		// Add the events from the parent view and also include new ones
 		events: function() {
 			return _.extend({}, carbon.fields.View.prototype.events, {
-				'change input.example-field': 'sync',
+				'change :input': '',
+				'change :input[type="hidden"]:first': 'sync',
+				'click .carbon-icon-preview': 'togglePopup',
+				'click .carbon-icon-icon-trigger': 'changeValue',
+				'keyup .carbon-icon-search input:first': 'search',
+				'focus .carbon-icon-search input:first': 'focusSearch',
+				'blur .carbon-icon-search input:first': 'blurSearch'
 			});
 		},
-		*/
 
 		initialize: function() {
 			// Initialize the parent view
 			carbon.fields.View.prototype.initialize.apply(this); // do not delete
 
-			// Listen for changes on the model and modify the DOM
-			// this.listenTo(this.model, 'change:example_property', this.handleChange);
-
-			// Wait for the field to be added to the DOM and run an init method
-			this.on('field:rendered', this.initField);
+			this.on('field:rendered', (function() {
+				this.$searchField = this.$('.carbon-icon-search input:first');
+				this.$preview = this.$('.carbon-icon-preview:first');
+				this.$previewIcon = this.$preview.find('i:first');
+				this.$popup = this.$('.carbon-icon-popup:first');
+			}).bind(this));
+			this.listenTo(this.model, 'change:value', this.syncView);
 		},
 
-		/*
-		 * Initialize the code responsible for the DOM manipulations
-		 */
-		initField: function() {
-			// Add your logic here
+		togglePopup: function(event) {
+			this.$popup.find('.carbon-icon-search input:first').focus();
+			event.preventDefault();
 		},
 
-		/*
-		 * Syncs the user entered value with the model. 
-		 * By default this method is fired when the input value has changed.
-		 *
-		 * If the field has more then one input, this method should be overwritten!
-		 */
-		/*
-		sync: function(event) {
-			var $input = this.$el.find('input.example-field');
-			var value = $input.val();
-
-			this.model.set('value', value);
+		changeValue: function(event) {
+			var $a = this.$(event.currentTarget);
+			var value = $a.attr('data-value');
+			this.$('.carbon-icon-value').val(value).trigger('change');
+			event.preventDefault();
 		},
-		*/
+
+		syncView: function(model) {
+			this.$('.carbon-icon-icon-trigger').removeClass('active');
+			this.$('.carbon-icon-icon-trigger[data-value="' + model.get('value') + '"]').addClass('active');
+
+			var options = model.get('options');
+			var value = model.get('value');
+			var previousValue = model.previous('value');
+
+			if ( previousValue && typeof options[previousValue] != 'undefined' ) {
+				this.$previewIcon.removeClass(options[previousValue].class);
+			}
+			if ( value && typeof options[value] != 'undefined' ) {
+				this.$previewIcon.addClass(options[value].class);
+				this.$previewIcon.html(options[value].contents);
+				this.$previewIcon.removeClass('hidden');
+			} else {
+				this.$previewIcon.addClass('hidden');
+			}
+		},
+
+		search: function(event) {
+			var query = $.trim( this.$(event.target).val().toLowerCase() );
+			var options = this.model.get('options');
+
+			if ( !query ) {
+				this.$('.carbon-icon-icon-container').removeClass('hidden');
+				return;
+			}
+
+			for (var id in options) {
+				var option = options[id];
+				var compareTo = [option.id, option.name].concat(option.categories);
+				var match = false;
+				for (var i = 0; i < compareTo.length; i++) {
+					var str = compareTo[i].toLowerCase();
+					if ( str.indexOf(query) !== -1 ) {
+						match = true;
+						break;
+					}
+				}
+
+				var $container = this.$('.carbon-icon-icon-container-' + option.id);
+				if ( match ) {
+					$container.removeClass('hidden');
+				} else {
+					$container.addClass('hidden');
+				}
+			}
+		},
+
+		focusSearch: function(event) {
+			$(event.target).closest('.carbon-icon-search').addClass('carbon-icon-search-focus');
+		},
+
+		blurSearch: function(event) {
+			setTimeout(function() {
+				$(event.target).closest('.carbon-icon-search').removeClass('carbon-icon-search-focus');
+			}, 100);
+		}
 	});
 
 }(jQuery));
