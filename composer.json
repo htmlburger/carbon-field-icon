@@ -17,8 +17,8 @@
         }
     ],
     "support": {
-        "source": "https://bitbucket.org/htmlburger/carbon-icon-field",
-        "issues": "https://bitbucket.org/htmlburger/carbon-icon-field/issues"
+        "source": "https://bitbucket.org/htmlburger/carbon-field-icon",
+        "issues": "https://bitbucket.org/htmlburger/carbon-field-icon/issues"
     },
     "require": {
         "composer/installers": "~1.0"
