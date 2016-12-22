@@ -11,12 +11,15 @@ class Icon_Field extends Predefined_Options_Field {
 
 	public $button_label = '';
 
+	public $no_results_label = '';
+
 	/**
 	 * Admin initialization actions
 	 */
 	public function admin_init() {
 		$this->none_label = __( 'None', 'carbon-field-icon' );
 		$this->button_label = __( 'Select Icon', 'carbon-field-icon' );
+		$this->no_results_label = __( 'No results found', 'carbon-field-icon' );
 	}
 
 	/**
@@ -145,7 +148,6 @@ class Icon_Field extends Predefined_Options_Field {
 
 		$field_data = array_merge( $field_data, array(
 			'options' => $options,
-			'button_label' => $this->button_label,
 		) );
 
 		return $field_data;
@@ -160,7 +162,7 @@ class Icon_Field extends Predefined_Options_Field {
 			<input type="hidden" name="{{{ name }}}" value="{{{ value }}}" class="carbon-icon-value" />
 			<a href="#" class="carbon-icon-preview">
 				<i class="{{{ (value && typeof options[value] !== 'undefined') ? options[value].class : 'hidden' }}}"></i>
-				<span class="button">{{{ button_label }}}</span>
+				<span class="button"><?php echo $this->button_label ?></span>
 			</a>
 
 			<div class="carbon-icon-popup">
@@ -179,6 +181,7 @@ class Icon_Field extends Predefined_Options_Field {
 								</li>
 							<# }); #>
 						<# } #>
+						<li class="carbon-icon-no-results"><?php echo $this->no_results_label ?></li>
 					</ul>
 				</div>
 			</div>

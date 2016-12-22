@@ -54,7 +54,7 @@ window.carbon = window.carbon || {};
 				'click .carbon-icon-icon-trigger': 'changeValue',
 				'keyup .carbon-icon-search input:first': 'search',
 				'focus .carbon-icon-search input:first': 'focusSearch',
-				'mousedown .carbon-icon-scroll': 'iconScrollMouseDown'
+				'mousedown .carbon-icon-popup': 'iconScrollMouseDown'
 			});
 		},
 
@@ -132,6 +132,10 @@ window.carbon = window.carbon || {};
 					$container.addClass('hidden');
 				}
 			}
+
+			var $iconList = this.$('.carbon-icon-list');
+			var hasResults = this.$('.carbon-icon-icon-container:not(.hidden)').length > 0;
+			$iconList.toggleClass('no-results', !hasResults);
 		},
 
 		focusSearch: function(event) {

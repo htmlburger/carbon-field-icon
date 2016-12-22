@@ -28,11 +28,14 @@
 .carbon-Icon .carbon-icon-list li i,
 .carbon-Icon .carbon-icon-list li i:before { font-size: 20px; }
 .carbon-Icon .carbon-icon-list li i:before { width: auto; height: auto; }
+.carbon-Icon .carbon-icon-list .carbon-icon-no-results { display: none; padding: 8px; }
+.carbon-Icon .carbon-icon-list.no-results .carbon-icon-no-results { display: block; }
 
 .carbon-Icon .carbon-icon-search { position: relative; width: 100%; border: 0;  border-spacing: 0; margin: 0; z-index: 1; }
 .carbon-Icon .carbon-icon-search:before { position: absolute; left: 8px; top: 50%; margin-top: -10px; color: #73777c; pointer-events: none; } /* color: $color-grey-font */
 .carbon-Icon .carbon-icon-search input { width: 100%; height: 40px; padding: 10px 9px 10px 32px !important; margin: 0; font-size: 13px; line-height: 18px; border-radius: 0; }
 .carbon-Icon .carbon-icon-search-focus + .carbon-icon-scroll { visibility: visible; opacity: 1; }
+
 
 @media screen and (max-width: 782px) { /* $breakpoint-mobile-max */
 	.carbon-Icon .carbon-icon-preview { float: none; margin-right: 0; }
