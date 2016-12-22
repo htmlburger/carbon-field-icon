@@ -16,7 +16,7 @@ window.carbon = window.carbon || {};
 	| This class represents the model for the field.
 	|
 	| A model is responsible for holding the fields current state (data).
-	| It also has all the logic surrounding the data management, like: 
+	| It also has all the logic surrounding the data management, like:
 	|  - conversion
 	|  - validation
 	|  - access control
@@ -54,7 +54,7 @@ window.carbon = window.carbon || {};
 				'click .carbon-icon-icon-trigger': 'changeValue',
 				'keyup .carbon-icon-search input:first': 'search',
 				'focus .carbon-icon-search input:first': 'focusSearch',
-				'blur .carbon-icon-search input:first': 'blurSearch'
+				'mousedown .carbon-icon-scroll': 'iconScrollMouseDown'
 			});
 		},
 
@@ -80,6 +80,7 @@ window.carbon = window.carbon || {};
 			var $a = this.$(event.currentTarget);
 			var value = $a.attr('data-value');
 			this.$('.carbon-icon-value').val(value).trigger('change');
+			this.$('.carbon-icon-search').removeClass('carbon-icon-search-focus')
 			event.preventDefault();
 		},
 
@@ -134,13 +135,17 @@ window.carbon = window.carbon || {};
 		},
 
 		focusSearch: function(event) {
-			$(event.target).closest('.carbon-icon-search').addClass('carbon-icon-search-focus');
+			var $target = this.$('.carbon-icon-search').addClass('carbon-icon-search-focus');
+
+			setTimeout(function() {
+				$('body').one('mousedown', function(event) {
+					$target.removeClass('carbon-icon-search-focus');
+				});
+			}, 10);
 		},
 
-		blurSearch: function(event) {
-			setTimeout(function() {
-				$(event.target).closest('.carbon-icon-search').removeClass('carbon-icon-search-focus');
-			}, 100);
+		iconScrollMouseDown: function(event) {
+			event.stopPropagation();
 		}
 	});
 
