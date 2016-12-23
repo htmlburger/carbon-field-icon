@@ -14,7 +14,7 @@
 .carbon-Icon .carbon-icon-preview .button { position: relative; z-index: 3; display: inline-block; vertical-align: middle; max-width: 100%; height: auto; padding-top: 3px; padding-bottom: 3px; margin: 0; visibility: hidden; opacity: 0; white-space: normal; line-height: 1.5; transition: visibility .2s ease-out,opacity .2s ease-out; }
 .carbon-Icon .carbon-icon-preview i.hidden + .button { visibility: visible; opacity: 1; }
 
-.carbon-Icon .carbon-icon-popup { float: left; width: calc(100% - 140px); position: relative; box-shadow: 0 1px 0 0 rgba(0,0,0,.05); }
+.carbon-Icon .carbon-icon-popup { float: left; width: calc(100% - 140px); min-width: 130px; position: relative; box-shadow: 0 1px 0 0 rgba(0,0,0,.05); }
 .carbon-Icon .carbon-icon-scroll { position: absolute; z-index: 100; left: 0; top: 100%; width: 100%; max-height: 250px; overflow-y: auto; background: #fff; border-width: 0 1px 1px; border-style: solid; border-color: #e5e5e5; visibility: hidden; opacity: 0; box-shadow: 0 2px 5px 0 rgba(0,0,0,.15); box-shadow: inset hoff voff blur color; } /* border-color: $color-border */
 
 .carbon-Icon .carbon-icon-list { list-style: none outside none; }
@@ -39,5 +39,5 @@
 
 @media screen and (max-width: 782px) { /* $breakpoint-mobile-max */
 	.carbon-Icon .carbon-icon-preview { float: none; margin-right: 0; }
-	.carbon-Icon .carbon-icon-popup { margin-top: 10px; }
+	.carbon-Icon .carbon-icon-popup { margin-top: 10px; width: 100%; }
 }
