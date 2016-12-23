@@ -14,6 +14,11 @@
             "name": "Yuliyan Slavchev",
             "email": "yuliyan.slavchev@gmail.com",
             "role": "Developer"
+        },
+        {
+            "name": "Plamen Kostadinov",
+            "email": "pkostadinov.2create@gmail.com",
+            "role": "Developer"
         }
     ],
     "support": {
@@ -24,6 +29,6 @@
         "composer/installers": "~1.0"
     },
     "autoload": {
-        "files": ["Icon_Field-plugin.php"]
+        "files": ["Icon_Field-library.php"]
     }
 }

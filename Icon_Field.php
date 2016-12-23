@@ -29,10 +29,9 @@ class Icon_Field extends Predefined_Options_Field {
 	 * Hook administration scripts and styles.
 	 */
 	public static function admin_enqueue_scripts() {
-		$dir = plugin_dir_url( __FILE__ );
 		wp_enqueue_style( 'fontawesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
-		wp_enqueue_style( 'carbon-field-icon', $dir . 'css/field.css' );
-		wp_enqueue_script( 'carbon-field-icon', $dir . 'js/field.js', array( 'carbon-fields' ) );
+		wp_enqueue_style( 'carbon-field-icon', CARBON_FIELD_ICON_URL . 'css/field.css' );
+		wp_enqueue_script( 'carbon-field-icon', CARBON_FIELD_ICON_URL . 'js/field.js', array( 'carbon-fields' ) );
 	}
 
 	public function get_default_options() {
@@ -50,8 +49,7 @@ class Icon_Field extends Predefined_Options_Field {
 
 	public static function get_fontawesome_options() {
 		if ( empty( static::$fontawesome_options_cache ) ) {
-			$dir = plugin_dir_path( __FILE__ );
-			$data = json_decode( file_get_contents( $dir . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'fontawesome.json' ), TRUE );
+			$data = json_decode( file_get_contents( CARBON_FIELD_ICON_DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'fontawesome.json' ), TRUE );
 
 			foreach ( $data as $icon ) {
 				static::$fontawesome_options_cache[ $icon['id'] ] = array(
@@ -72,8 +70,7 @@ class Icon_Field extends Predefined_Options_Field {
 
 	public static function get_dashicons_options() {
 		if ( empty( static::$dashicons_options_cache ) ) {
-			$dir = plugin_dir_path( __FILE__ );
-			$data = json_decode( file_get_contents( $dir . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'dashicons.json' ), TRUE );
+			$data = json_decode( file_get_contents( CARBON_FIELD_ICON_DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'dashicons.json' ), TRUE );
 
 			foreach ( $data as $icon ) {
 				static::$dashicons_options_cache[ $icon['id'] ] = array(

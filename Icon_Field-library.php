@@ -1,10 +1,4 @@
 <?php
-/*
-Plugin Name: Carbon Field: Icon
-Description: Extends the base Carbon Fields with an Icon field. 
-Version: 1.0.1
-*/
-
 /**
  * Set text domain
  * @see https://codex.wordpress.org/Function_Reference/load_plugin_textdomain
@@ -16,10 +10,13 @@ load_plugin_textdomain( 'carbon-field-icon', false, dirname( plugin_basename( __
  * @see https://codex.wordpress.org/Function_Reference/load_plugin_textdomain
  */
 if ( !defined( 'CARBON_FIELD_ICON_DIR' ) ) {
-	define( 'CARBON_FIELD_ICON_DIR', plugin_dir_path( __FILE__ ) );
+	define( 'CARBON_FIELD_ICON_DIR', dirname( __FILE__ ) );
 }
 if ( !defined( 'CARBON_FIELD_ICON_URL' ) ) {
-	define( 'CARBON_FIELD_ICON_URL', plugin_dir_url( __FILE__ ) );
+	$theme_path = wp_normalize_path( get_template_directory() );
+	$current_path = wp_normalize_path( dirname( __FILE__ ) );
+	$relative_path = str_replace( $theme_path, '', $current_path );
+	define( 'CARBON_FIELD_ICON_URL', get_template_directory_uri() . $relative_path . '/' );
 }
 
 /**
