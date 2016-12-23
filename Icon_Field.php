@@ -13,12 +13,15 @@ class Icon_Field extends Predefined_Options_Field {
 
 	public $no_results_label = '';
 
+	public $search_label = '';
+
 	/**
 	 * Admin initialization actions
 	 */
 	public function admin_init() {
 		$this->none_label = __( 'None', 'carbon-field-icon' );
 		$this->button_label = __( 'Select Icon', 'carbon-field-icon' );
+		$this->search_label = __( 'Search ...', 'carbon-field-icon' );
 		$this->no_results_label = __( 'No results found', 'carbon-field-icon' );
 	}
 
@@ -148,6 +151,7 @@ class Icon_Field extends Predefined_Options_Field {
 
 		$field_data = array_merge( $field_data, array(
 			'options' => $options,
+			'search_label' => $this->search_label,
 		) );
 
 		return $field_data;
@@ -167,7 +171,7 @@ class Icon_Field extends Predefined_Options_Field {
 
 			<div class="carbon-icon-popup">
 				<div class="carbon-icon-search dashicons-before dashicons-search">
-					<input type="text" value="" placeholder="<?php esc_attr_e( 'Search ...', 'carbon-field-icon' ); ?>" />
+					<input type="text" value="" placeholder="{{{ (value && typeof options[value] !== 'undefined') ? options[value].name : search_label }}}" />
 				</div>
 				<div class="carbon-icon-scroll">
 					<ul class="carbon-icon-list">

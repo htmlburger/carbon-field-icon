@@ -89,18 +89,22 @@ window.carbon = window.carbon || {};
 			this.$('.carbon-icon-icon-trigger[data-value="' + model.get('value') + '"]').addClass('active');
 
 			var options = model.get('options');
+			var searchLabel = model.get('search_label');
 			var value = model.get('value');
 			var previousValue = model.previous('value');
 
 			if ( previousValue && typeof options[previousValue] != 'undefined' ) {
 				this.$previewIcon.removeClass(options[previousValue].class);
+				this.$searchField.attr('placeholder', searchLabel);
 			}
 			if ( value && typeof options[value] != 'undefined' ) {
 				this.$previewIcon.addClass(options[value].class);
 				this.$previewIcon.html(options[value].contents);
 				this.$previewIcon.removeClass('hidden');
+				this.$searchField.attr('placeholder', options[value].name);
 			} else {
 				this.$previewIcon.addClass('hidden');
+				this.$searchField.attr('placeholder', searchLabel);
 			}
 		},
 
