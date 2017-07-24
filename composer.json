@@ -1,34 +1,20 @@
 {
     "name": "htmlburger/carbon-field-icon",
-    "description": "Extends the base Carbon Fields with an Icon field. ",
-    "type": "wordpress-plugin",
-    "license": "GPL-2.0",
-    "homepage": "http://carbonfields.net/",
-    "authors": [
-        {
-            "name": "Atanas Angelov",
-            "email": "atanas.angelov.dev@gmail.com",
-            "role": "Developer"
-        },
-        {
-            "name": "Yuliyan Slavchev",
-            "email": "yuliyan.slavchev@gmail.com",
-            "role": "Developer"
-        },
-        {
-            "name": "Plamen Kostadinov",
-            "email": "pkostadinov.2create@gmail.com",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "source": "https://bitbucket.org/htmlburger/carbon-field-icon",
-        "issues": "https://bitbucket.org/htmlburger/carbon-field-icon/issues"
-    },
+    "description": "Carbon Fields extension, that adds a Icon field type.",
+    "keywords": ["wordpress", "carbon-field", "carbon-field-icon"],
+    "homepage": "",
+    "type": "library",
+    "license": "GPL-2.0+",
+    "authors": [],
     "require": {
-        "composer/installers": "~1.0"
+        "htmlburger/carbon-fields": "^2.0"
     },
     "autoload": {
-        "files": ["Icon_Field-library.php"]
+        "files": [
+            "field.php"
+        ],
+        "psr-4": {
+            "Carbon_Field_Icon\\": "core/"
+        }
     }
 }
