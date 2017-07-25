@@ -35,8 +35,8 @@ export const IconField = ({
 			value={field.value} >
 
 			{
-				field.options.map(({ name, id }, index) => {
-					return <option key={index} value={id}>
+				field.options.map(({ name, value }, index) => {
+					return <option key={index} value={value}>
 						{name}
 					</option>;
 				})
@@ -56,6 +56,13 @@ IconField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.string,
 		options: PropTypes.array,
+		options: PropTypes.arrayOf(PropTypes.shape({
+			value: PropTypes.string,
+			name: PropTypes.string,
+			class: PropTypes.string,
+			contents: PropTypes.string,
+			categories: PropTypes.arrayOf(PropTypes.string),
+		})),
 	}),
 	handleChange: PropTypes.func,
 };
@@ -80,7 +87,7 @@ export const enhance = compose(
 	 * The handlers passed to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, setFieldValue }) => ({ target: value }) => {console.log(value);setFieldValue(field.id, value)},
+		handleChange: ({ field, setFieldValue }) => ({ target: { value } }) => setFieldValue(field.id, value),
 	})
 );
 
