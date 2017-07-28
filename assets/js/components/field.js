@@ -3,7 +3,9 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, withHandlers, setStatic } from 'recompose';
+import { compose, withHandlers, withProps, setStatic } from 'recompose';
+import { filter } from 'lodash';
+import cx from 'classnames';
 
 /**
  * The internal dependencies.
@@ -12,37 +14,117 @@ import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 
-/**
- * Render a number input field.
- *
- * @param  {Object}        props
- * @param  {String}        props.name
- * @param  {Object}        props.field
- * @param  {Function}      props.handleChange
- * @return {React.Element}
- */
-export const IconField = ({
-	name,
-	field,
-	handleChange
-}) => {
-	return <Field field={field}>
-		<select
-			id={field.id}
-			name={name}
-			onChange={handleChange}
-			disabled={!field.ui.is_visible}
-			value={field.value} >
+class IconField extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			searchFocused: false,
+			searchQuery: '',
+		};
+	}
 
-			{
-				field.options.map(({ name, value }, index) => {
-					return <option key={index} value={value}>
-						{name}
-					</option>;
-				})
-			}
-		</select>
-	</Field>;
+	render() {
+		const {
+			name,
+			field,
+			valueClass,
+			searchPlaceholder,
+			handleChange,
+		} = this.props;
+
+		return <Field field={field}>
+			<div className="carbon-icon-container">
+				<input
+					type="hidden"
+					name={name}
+					id={field.id}
+					value={field.value}
+					className="carbon-icon-value"
+					/>
+				<a onClick={this.focusInput.bind(this)} href="#" className="carbon-icon-preview">
+					<i className={valueClass}></i>
+					<span className="button">{carbonFieldIconL10n.selectIcon}</span>
+				</a>
+
+				<div className="carbon-icon-popup">
+					<div className={cx({
+							'carbon-icon-search': true,
+							'dashicons-before': true,
+							'dashicons-search': true,
+							'carbon-icon-search-focus': this.state.searchFocused,
+						})} >
+						<input
+							onFocus={this.openList.bind(this)}
+							onBlur={this.closeList.bind(this)}
+							onChange={this.updateSearchQuery.bind(this)}
+							type="text"
+							value={this.state.searchQuery}
+							placeholder={searchPlaceholder}
+							ref={searchInput => this.searchInput = searchInput}
+							/>
+					</div>
+					<div className="carbon-icon-scroll">
+						<ul className="carbon-icon-list">
+							{this.filterOptions(field.options, field.value)}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</Field>;
+	}
+
+	focusInput(e) {
+		e.preventDefault();
+		this.searchInput.focus();
+	}
+
+	openList(e) {
+		this.setState({
+			searchFocused: true,
+		});
+	}
+
+	closeList(e) {
+		/*this.setState({
+			searchFocused: false,
+		});*/
+	}
+
+	updateSearchQuery(e) {
+		this.setState({
+			searchQuery: e.target.value,
+		});
+	}
+
+	filterOptions(rawOptions, value) {
+		const {
+			handleChange,
+		} = this.props;
+
+		// TODO filter options according to searchQuery
+		let options = filter( rawOptions, o => true );
+
+		options = options.map((item, index) => {
+			return <li key={item.value} className={'carbon-icon-icon-container carbon-icon-icon-container-' + item.value}>
+				<a
+					onClick={handleChange.bind(null, item)}
+					href="#"
+					className={cx({
+						'active': item.value === value,
+					})} >
+					<i className={ item.class } dangerouslySetInnerHTML={{__html: item.contents}}
+						></i>
+					<span>{ item.name }</span>
+				</a>
+			</li>;
+		});
+
+		if (options.length === 0) {
+			options.push(<li key="no-results" className="carbon-icon-no-results">{carbonFieldIconL10n.noResults}</li>);
+		}
+
+		return options;
+	}
 }
 
 /**
@@ -87,8 +169,16 @@ export const enhance = compose(
 	 * The handlers passed to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, setFieldValue }) => ({ target: { value } }) => setFieldValue(field.id, value),
-	})
+		handleChange: ({ field, setFieldValue }) => ({ value }, e) => {
+			e.preventDefault();
+			setFieldValue(field.id, value);
+		},
+	}),
+
+	withProps(({ field: { value, options } }) => ({
+		valueClass: (value && typeof options[value] !== 'undefined') ? options[value].class : 'hidden',
+		searchPlaceholder: (value && typeof options[value] !== 'undefined') ? options[value].name : carbonFieldIconL10n.search,
+	}))
 );
 
 export default setStatic('type', [

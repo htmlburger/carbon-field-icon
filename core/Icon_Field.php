@@ -155,7 +155,7 @@ class Icon_Field extends Predefined_Options_Field {
 			$data = json_decode( file_get_contents( \Carbon_Field_Icon\DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'fontawesome.json' ), TRUE );
 
 			foreach ( $data as $icon ) {
-				$value = 'fontawesome:' . $icon['id'];
+				$value = 'fontawesome-' . $icon['id'];
 				static::$fontawesome_options_cache[ $value ] = array(
 					'value' => $value,
 					'name' => $icon['name'],
@@ -185,7 +185,7 @@ class Icon_Field extends Predefined_Options_Field {
 			$data = json_decode( file_get_contents( \Carbon_Field_Icon\DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'dashicons.json' ), TRUE );
 
 			foreach ( $data as $icon ) {
-				$value = 'dashicons:' . $icon['id'];
+				$value = 'dashicons-' . $icon['id'];
 				static::$dashicons_options_cache[ $value ] = array(
 					'value' => $value,
 					'name' => $icon['name'],
