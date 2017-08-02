@@ -4,8 +4,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, withHandlers, withProps, setStatic } from 'recompose';
-import { filter } from 'lodash';
+import { first, filter, some } from 'lodash';
 import cx from 'classnames';
+import onClickOutside from 'react-onclickoutside';
 
 /**
  * The internal dependencies.
@@ -55,7 +56,6 @@ class IconField extends React.Component {
 						})} >
 						<input
 							onFocus={this.openList.bind(this)}
-							onBlur={this.closeList.bind(this)}
 							onChange={this.updateSearchQuery.bind(this)}
 							type="text"
 							value={this.state.searchQuery}
@@ -78,16 +78,22 @@ class IconField extends React.Component {
 		this.searchInput.focus();
 	}
 
-	openList(e) {
+	selectOption(option, e) {
+		e.preventDefault();
+		this.props.handleChange(option);
+		this.closeList();
+	}
+
+	openList() {
 		this.setState({
 			searchFocused: true,
 		});
 	}
 
-	closeList(e) {
-		/*this.setState({
+	closeList() {
+		this.setState({
 			searchFocused: false,
-		});*/
+		});
 	}
 
 	updateSearchQuery(e) {
@@ -101,13 +107,16 @@ class IconField extends React.Component {
 			handleChange,
 		} = this.props;
 
-		// TODO filter options according to searchQuery
-		let options = filter( rawOptions, o => true );
+		let options = filter( rawOptions, option => {
+			const compareTo = [option.value, option.name].concat(option.categories);
+			const match = some( compareTo, metadata => metadata.indexOf( this.state.searchQuery ) !== -1 );
+			return match;
+		} );
 
 		options = options.map((item, index) => {
 			return <li key={item.value} className={'carbon-icon-icon-container carbon-icon-icon-container-' + item.value}>
 				<a
-					onClick={handleChange.bind(null, item)}
+					onClick={this.selectOption.bind(this, item)}
 					href="#"
 					className={cx({
 						'active': item.value === value,
@@ -124,6 +133,10 @@ class IconField extends React.Component {
 		}
 
 		return options;
+	}
+
+	handleClickOutside() {
+		this.closeList();
 	}
 }
 
@@ -169,16 +182,21 @@ export const enhance = compose(
 	 * The handlers passed to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, setFieldValue }) => ({ value }, e) => {
-			e.preventDefault();
-			setFieldValue(field.id, value);
-		},
+		handleChange: ({ field, setFieldValue }) => ({ value }) => setFieldValue(field.id, value),
 	}),
 
-	withProps(({ field: { value, options } }) => ({
-		valueClass: (value && typeof options[value] !== 'undefined') ? options[value].class : 'hidden',
-		searchPlaceholder: (value && typeof options[value] !== 'undefined') ? options[value].name : carbonFieldIconL10n.search,
-	}))
+	withProps(({ field: { value, options } }) => {
+		let valueObject = first( filter( options, option => option.value === value ) );
+		if ( valueObject && valueObject.value === '' ) {
+			valueObject = null;
+		}
+		return {
+			valueClass: valueObject ? valueObject.class : 'hidden',
+			searchPlaceholder: valueObject ? valueObject.name : carbonFieldIconL10n.search,
+		};
+	}),
+
+	onClickOutside
 );
 
 export default setStatic('type', [
