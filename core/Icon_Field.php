@@ -38,10 +38,10 @@ class Icon_Field extends Predefined_Options_Field {
 
 		# Enqueue CSS
 		wp_enqueue_style( 'fontawesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
-		wp_enqueue_style( 'carbon-field-icon', $root_uri . '/assets/css/field.css' );
+		wp_enqueue_style( 'carbon-field-icon', $root_uri . '/assets/css/field.css', array(), \Carbon_Field_Icon\VERSION );
 
 		# Enqueue JS
-		wp_enqueue_script( 'carbon-field-icon', $root_uri . '/assets/js/bundle.js', array( 'carbon-fields-boot' ) );
+		wp_enqueue_script( 'carbon-field-icon', $root_uri . '/assets/js/bundle.js', array( 'carbon-fields-boot' ), \Carbon_Field_Icon\VERSION );
 
 		wp_localize_script( 'carbon-field-icon', 'carbonFieldIconL10n', apply_filters( 'carbon_field_icon_l10n', array(
 			'selectIcon' => __( 'Select Icon', 'carbon-field-icon' ),
