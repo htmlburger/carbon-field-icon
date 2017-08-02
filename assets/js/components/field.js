@@ -29,6 +29,7 @@ class IconField extends React.Component {
 			name,
 			field,
 			valueClass,
+			valueContents,
 			searchPlaceholder,
 			handleChange,
 		} = this.props;
@@ -44,7 +45,7 @@ class IconField extends React.Component {
 					/>
 				<span className="carbon-icon-preview">
 					<a onClick={this.focusInput.bind(this)} href="#">
-						<i className={valueClass}></i>
+						<i className={valueClass} dangerouslySetInnerHTML={{__html: valueContents}}></i>
 						<span className="button">{carbonFieldIconL10n.selectIcon}</span>
 					</a>
 					<input
@@ -199,6 +200,7 @@ export const enhance = compose(
 		}
 		return {
 			valueClass: valueObject ? valueObject.class : 'hidden',
+			valueContents: valueObject ? valueObject.contents : '',
 			searchPlaceholder: valueObject ? valueObject.name : carbonFieldIconL10n.search,
 		};
 	}),
