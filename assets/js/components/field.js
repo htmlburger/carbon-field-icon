@@ -42,10 +42,17 @@ class IconField extends React.Component {
 					value={field.value}
 					className="carbon-icon-value"
 					/>
-				<a onClick={this.focusInput.bind(this)} href="#" className="carbon-icon-preview">
-					<i className={valueClass}></i>
-					<span className="button">{carbonFieldIconL10n.selectIcon}</span>
-				</a>
+				<span className="carbon-icon-preview">
+					<a onClick={this.focusInput.bind(this)} href="#">
+						<i className={valueClass}></i>
+						<span className="button">{carbonFieldIconL10n.selectIcon}</span>
+					</a>
+					<input
+						type="text"
+						className="carbon-icon-icon-name"
+						value={field.value}
+						readOnly />
+				</span>
 
 				<div className="carbon-icon-popup">
 					<div className={cx({
