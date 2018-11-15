@@ -1,5 +1,7 @@
 # Carbon Field Icon
 
+[![Packagist](https://img.shields.io/packagist/vpre/htmlburger/carbon-field-icon.svg?style=flat-square&colorB=0366d6)](https://packagist.org/packages/htmlburger/carbon-field-icon)
+
 Provides the ability to select an icon or a glyph.
 
 ## Supported glyphs
