@@ -116,7 +116,7 @@ class IconField extends React.Component {
 		} = this.props;
 
 		let options = filter( rawOptions, option => {
-			const compareTo = [option.value, option.name].concat(option.categories);
+			const compareTo = [option.value, option.name].concat(option.search_terms);
 			const match = some( compareTo, metadata => metadata.indexOf( this.state.searchQuery ) !== -1 );
 			return match;
 		} );

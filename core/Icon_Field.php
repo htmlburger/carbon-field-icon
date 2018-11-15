@@ -5,7 +5,6 @@ namespace Carbon_Field_Icon;
 use Carbon_Fields\Field\Predefined_Options_Field;
 
 class Icon_Field extends Predefined_Options_Field {
-
 	/**
 	 * Fontawesome option cache
 	 *
@@ -37,7 +36,7 @@ class Icon_Field extends Predefined_Options_Field {
 		$root_uri = \Carbon_Fields\Carbon_Fields::directory_to_url( \Carbon_Field_Icon\DIR );
 
 		# Enqueue CSS
-		wp_enqueue_style( 'fontawesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+		wp_enqueue_style( 'fontawesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css', array(), '5.5.0' );
 		wp_enqueue_style( 'carbon-field-icon', $root_uri . '/assets/css/field.css', array(), \Carbon_Field_Icon\VERSION );
 
 		# Enqueue JS
@@ -85,7 +84,7 @@ class Icon_Field extends Predefined_Options_Field {
 				'name' => isset( $raw['name'] ) ? $raw['name'] : $value,
 				'class' => isset( $raw['class'] ) ? $raw['class'] : '',
 				'contents' => isset( $raw['contents'] ) ? $raw['contents'] : '',
-				'categories' => isset( $raw['categories'] ) ? $raw['categories'] : array(),
+				'search_terms' => isset( $raw['search_terms'] ) ? $raw['search_terms'] : array(),
 			);
 			$options[ $value ] = $option;
 		}
@@ -156,12 +155,19 @@ class Icon_Field extends Predefined_Options_Field {
 
 			foreach ( $data as $icon ) {
 				$value = $icon['id'];
+				
+				if ( $icon['styles'][0] === 'brands' ) {
+					$icon_class = 'fab';
+				} else if ( $icon['styles'][0] === 'solid' ) {
+					$icon_class = 'fas';
+				}
+
 				static::$fontawesome_options_cache[ $value ] = array(
-					'value' => $value,
-					'name' => $icon['name'],
-					'class' => 'fa fa-' . $icon['id'],
-					'contents' => '',
-					'categories' => $icon['categories'],
+					'value'        => $value,
+					'name'         => $icon['name'],
+					'class'        => "{$icon_class} fa-" . $icon['id'],
+					'contents'     => '',
+					'search_terms' => $icon['search_terms'],
 				);
 			}
 		}
@@ -187,11 +193,11 @@ class Icon_Field extends Predefined_Options_Field {
 			foreach ( $data as $icon ) {
 				$value = $icon['id'];
 				static::$dashicons_options_cache[ $value ] = array(
-					'value' => $value,
-					'name' => $icon['name'],
-					'class' => 'dashicons-before ' . $icon['id'],
-					'contents' => '',
-					'categories' => $icon['categories'],
+					'value'        => $value,
+					'name'         => $icon['name'],
+					'class'        => 'dashicons-before ' . $icon['id'],
+					'contents'     => '',
+					'search_terms' => $icon['categories'],
 				);
 			}
 		}
@@ -199,7 +205,7 @@ class Icon_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Add all bundled dashicon options
+	 * Add all bundled dashicon options.
 	 */
 	public function add_dashicons_options() {
 		return $this->add_options( static::get_dashicons_options() );
