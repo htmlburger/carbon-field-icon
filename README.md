@@ -39,11 +39,10 @@ Custom icon list:
 
                 // Full settings:
                 'my-custom-icon-2' => array(
-                    'name'        => 'My Custom Icon 2',
-                    'id'          => 'my-custom-icon-2',
-                    'class'       => 'my-custom-prefix-class',
-                    'contents'    => '&nbsp;',
-                    'categories'  => array( 'shop', 'checkout', 'product' ),
+                    'name'         => 'My Custom Icon 2',
+                    'id'           => 'my-custom-icon-2',
+                    'class'        => 'my-custom-prefix-class',
+                    'search_terms' => array( 'shop', 'checkout', 'product' ),
                 ),
             );
         } ),
