@@ -58,9 +58,9 @@ class Icon_Field extends Predefined_Options_Field {
 		$options = array(
 			'value' => '',
 			'name' => __( 'None', 'carbon-field-icon' ),
-			'class'=>'fa',
-			'contents'=>'&nbsp;',
-			'categories' => array(),
+			'class' => 'fa',
+			'contents' => '&nbsp;',
+			'search_terms' => array(),
 		);
 		return $options;
 	}
@@ -100,11 +100,13 @@ class Icon_Field extends Predefined_Options_Field {
 	 */
 	protected function get_option_by_value( $value ) {
 		$options = $this->get_options();
+
 		foreach ( $options as $option ) {
 			if ( $option['value'] === $value ) {
 				return $option;
 			}
 		}
+
 		return null;
 	}
 
@@ -115,6 +117,7 @@ class Icon_Field extends Predefined_Options_Field {
 		if ( is_array( $value ) && isset( $value['value'] ) ) {
 			$value = $value['value'];
 		}
+
 		return parent::set_value( $value );
 	}
 
@@ -124,9 +127,11 @@ class Icon_Field extends Predefined_Options_Field {
 	public function get_formatted_value() {
 		$value = $this->get_value();
 		$formatted_value = $this->get_option_by_value( $value );
+
 		if ( $formatted_value === null ) {
 			$formatted_value = $value;
 		}
+
 		return $formatted_value;
 	}
 
@@ -171,6 +176,7 @@ class Icon_Field extends Predefined_Options_Field {
 				);
 			}
 		}
+
 		return static::$fontawesome_options_cache;
 	}
 
@@ -206,6 +212,10 @@ class Icon_Field extends Predefined_Options_Field {
 
 	/**
 	 * Add all bundled dashicon options.
+	 *
+	 * @access public
+	 *
+	 * @return $this
 	 */
 	public function add_dashicons_options() {
 		return $this->add_options( static::get_dashicons_options() );
