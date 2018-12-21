@@ -1,0 +1,44 @@
+/* ------------------------------------------------------------ *\
+	Field - icon
+\* ------------------------------------------------------------ */
+
+.carbon-icon {  }
+
+.carbon-icon .carbon-icon-container:after { content: ''; line-height: 0; display: table; clear: both; }
+
+.carbon-icon .carbon-icon-preview { float: left; position: relative; width: 128px; margin-right: 10px; border: 1px dashed #ccc; }
+.carbon-icon .carbon-icon-preview a { position: relative; display: block; width: 100%; height: 100px; line-height: 100px; text-align: center; color: inherit; text-decoration: none; }
+.carbon-icon .carbon-icon-preview i { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+.carbon-icon .carbon-icon-preview i,
+.carbon-icon .carbon-icon-preview i:before { font-size: 64px; line-height: 100px; }
+.carbon-icon .carbon-icon-preview i:before { width: auto; height: auto; }
+.carbon-icon .carbon-icon-preview .button { position: relative; z-index: 3; display: inline-block; vertical-align: middle; max-width: 100%; height: auto; padding-top: 3px; padding-bottom: 3px; margin: 0; visibility: hidden; opacity: 0; white-space: normal; line-height: 1.5; transition: visibility .2s ease-out,opacity .2s ease-out; }
+.carbon-icon .carbon-icon-preview i.hidden + .button { visibility: visible; opacity: 1; }
+
+.carbon-icon .carbon-icon-popup { float: left; width: calc(100% - 140px); min-width: 130px; position: relative; box-shadow: 0 1px 0 0 rgba(0,0,0,.05); }
+.carbon-icon .carbon-icon-scroll { position: absolute; z-index: 100; left: 0; top: 100%; width: 100%; max-height: 250px; overflow-y: auto; background: #fff; border-width: 0 1px 1px; border-style: solid; border-color: #e5e5e5; visibility: hidden; opacity: 0; box-shadow: 0 2px 5px 0 rgba(0,0,0,.15); box-shadow: inset hoff voff blur color; }
+
+.carbon-icon .carbon-icon-preview input.carbon-icon-icon-name { z-index: 10; margin: 0; }
+
+.carbon-icon .carbon-icon-list { list-style: none outside none; }
+.carbon-icon .carbon-icon-list li { width: auto; display: block; text-align: left; }
+.carbon-icon .carbon-icon-list li.hidden { display: none; }
+.carbon-icon .carbon-icon-list li a { display: block; text-decoration: none; color: inherit; padding: 8px; }
+.carbon-icon .carbon-icon-list li a:focus { outline: none; box-shadow: none; }
+.carbon-icon .carbon-icon-list li a:hover,
+.carbon-icon .carbon-icon-list li a.active { background: #fafafa; }
+.carbon-icon .carbon-icon-list li i { width: 24px; margin-right: 4px; color: #73777c; }
+.carbon-icon .carbon-icon-list li i,
+.carbon-icon .carbon-icon-list li i:before { font-size: 20px; }
+.carbon-icon .carbon-icon-list li i:before { width: auto; height: auto; }
+.carbon-icon .carbon-icon-list .carbon-icon-no-results { padding: 8px; }
+
+.carbon-icon .carbon-icon-search { position: relative; width: 100%; border: 0;  border-spacing: 0; margin: 0; z-index: 1; }
+.carbon-icon .carbon-icon-search:before { position: absolute; left: 8px; top: 50%; margin-top: -10px; color: #73777c; pointer-events: none; }
+.carbon-icon .carbon-icon-search input { width: 100%; height: 40px; padding: 10px 9px 10px 32px !important; margin: 0; font-size: 13px; line-height: 18px; border-radius: 0; }
+.carbon-icon .carbon-icon-search-focus + .carbon-icon-scroll { visibility: visible; opacity: 1; }
+
+@media screen and (max-width: 782px) {
+	.carbon-icon .carbon-icon-preview { float: none; margin-right: 0; }
+	.carbon-icon .carbon-icon-popup { margin-top: 10px; width: 100%; }
+}

@@ -45,6 +45,12 @@ class Icon_Field extends Predefined_Options_Field {
 	public static function admin_enqueue_scripts() {
 		$root_uri = \Carbon_Fields\Carbon_Fields::directory_to_url( \Carbon_Field_Icon\DIR );
 
+		// Enqueue field styles.
+		wp_enqueue_style( 'carbon-field-YOURFIELDNAME', $root_uri . '/build/bundle.css' );
+
+		// Enqueue field scripts.
+		wp_enqueue_script( 'carbon-field-YOURFIELDNAME', $root_uri . '/build/bundle.js', array( 'carbon-fields-core' ) );
+
 		foreach ( static::$providers as $provider_name ) {
 			$provider = \Carbon_Fields\Carbon_Fields::resolve( $provider_name, 'icon_field_providers' );
 
@@ -53,17 +59,17 @@ class Icon_Field extends Predefined_Options_Field {
 			}
 		}
 
-		# Enqueue CSS
-		wp_enqueue_style( 'carbon-field-icon', $root_uri . '/assets/css/field.css', array(), \Carbon_Field_Icon\VERSION );
+		// Enqueue field styles.
+		wp_enqueue_style( 'carbon-field-icon', $root_uri . '/build/bundle.css', array(), \Carbon_Field_Icon\VERSION );
 
-		# Enqueue JS
-		wp_enqueue_script( 'carbon-field-icon', $root_uri . '/assets/js/bundle.js', array( 'carbon-fields-boot' ), \Carbon_Field_Icon\VERSION );
+		// Enqueue field scripts.
+		wp_enqueue_script( 'carbon-field-icon', $root_uri . '/build/bundle.js', array( 'carbon-fields-core' ), \Carbon_Field_Icon\VERSION );
 
-		wp_localize_script( 'carbon-field-icon', 'carbonFieldIconL10n', apply_filters( 'carbon_field_icon_l10n', array(
-			'selectIcon' => __( 'Select Icon', 'carbon-field-icon' ),
-			'search' => __( 'Search ...', 'carbon-field-icon' ),
-			'noResults' => __( 'No results found', 'carbon-field-icon' ),
-		) ) );
+		// wp_localize_script( 'carbon-field-icon', 'carbonFieldIconL10n', apply_filters( 'carbon_field_icon_l10n', array(
+		// 	'selectIcon' => __( 'Select Icon', 'carbon-field-icon' ),
+		// 	'search' => __( 'Search ...', 'carbon-field-icon' ),
+		// 	'noResults' => __( 'No results found', 'carbon-field-icon' ),
+		// ) ) );
 	}
 
 	/**
@@ -182,7 +188,7 @@ class Icon_Field extends Predefined_Options_Field {
 
 			foreach ( $data as $icon ) {
 				$value = $icon['id'];
-				
+
 				if ( $icon['styles'][0] === 'brands' ) {
 					$icon_class = 'fab';
 				} else if ( $icon['styles'][0] === 'solid' ) {

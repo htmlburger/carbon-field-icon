@@ -6,7 +6,7 @@ use Carbon_Field_Icon\Icon_Field;
 use Carbon_Field_Icon\Providers\Dashicons_Provider;
 use Carbon_Field_Icon\Providers\Font_Awesome_Provider;
 
-define( 'Carbon_Field_Icon\\VERSION', '2.0.0' );
+define( 'Carbon_Field_Icon\\VERSION', '3.0.0' );
 define( 'Carbon_Field_Icon\\DIR', __DIR__ );
 
 Carbon_Fields::extend( Icon_Field::class, function( $container ) {
