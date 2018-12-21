@@ -45,12 +45,6 @@ class Icon_Field extends Predefined_Options_Field {
 	public static function admin_enqueue_scripts() {
 		$root_uri = \Carbon_Fields\Carbon_Fields::directory_to_url( \Carbon_Field_Icon\DIR );
 
-		// Enqueue field styles.
-		wp_enqueue_style( 'carbon-field-YOURFIELDNAME', $root_uri . '/build/bundle.css' );
-
-		// Enqueue field scripts.
-		wp_enqueue_script( 'carbon-field-YOURFIELDNAME', $root_uri . '/build/bundle.js', array( 'carbon-fields-core' ) );
-
 		foreach ( static::$providers as $provider_name ) {
 			$provider = \Carbon_Fields\Carbon_Fields::resolve( $provider_name, 'icon_field_providers' );
 
@@ -64,12 +58,6 @@ class Icon_Field extends Predefined_Options_Field {
 
 		// Enqueue field scripts.
 		wp_enqueue_script( 'carbon-field-icon', $root_uri . '/build/bundle.js', array( 'carbon-fields-core' ), \Carbon_Field_Icon\VERSION );
-
-		// wp_localize_script( 'carbon-field-icon', 'carbonFieldIconL10n', apply_filters( 'carbon_field_icon_l10n', array(
-		// 	'selectIcon' => __( 'Select Icon', 'carbon-field-icon' ),
-		// 	'search' => __( 'Search ...', 'carbon-field-icon' ),
-		// 	'noResults' => __( 'No results found', 'carbon-field-icon' ),
-		// ) ) );
 	}
 
 	/**
@@ -78,14 +66,12 @@ class Icon_Field extends Predefined_Options_Field {
 	 * @return array
 	 */
 	protected function get_default_option() {
-		$options = array(
-			'value' => '',
-			'name' => __( 'None', 'carbon-field-icon' ),
-			'class' => 'fa',
+		return array(
+			'value'        => '',
+			'name'         => __( 'None', 'carbon-field-icon' ),
+			'class'        => 'fa',
 			'search_terms' => array(),
 		);
-
-		return $options;
 	}
 
 	/**
@@ -106,9 +92,9 @@ class Icon_Field extends Predefined_Options_Field {
 		foreach ( $raw_options as $key => $raw ) {
 			$value = isset( $raw['value'] ) ? $raw['value'] : $key;
 			$option = array(
-				'value' => $value,
-				'name' => isset( $raw['name'] ) ? $raw['name'] : $value,
-				'class' => isset( $raw['class'] ) ? $raw['class'] : '',
+				'value'        => $value,
+				'name'         => isset( $raw['name'] ) ? $raw['name'] : $value,
+				'class'        => isset( $raw['class'] ) ? $raw['class'] : '',
 				'search_terms' => isset( $raw['search_terms'] ) ? $raw['search_terms'] : array(),
 			);
 
@@ -153,7 +139,7 @@ class Icon_Field extends Predefined_Options_Field {
 	 * {@inheritDoc}
 	 */
 	public function get_formatted_value() {
-		$value = $this->get_value();
+		$value           = $this->get_value();
 		$formatted_value = $this->get_option_by_value( $value );
 
 		if ( $formatted_value === null ) {
