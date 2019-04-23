@@ -13,7 +13,12 @@ class Font_Awesome_Provider implements Icon_Provider_Interface {
 	 * @return void
 	 */
 	public function enqueue_assets() {
-		wp_enqueue_style( 'fontawesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css', array(), '5.5.0' );
+		wp_enqueue_style(
+			'fontawesome',
+			'//use.fontawesome.com/releases/v' . static::VERSION . '/css/all.css',
+			[],
+			static::VERSION
+		);
 	}
 
 	/**
@@ -30,7 +35,7 @@ class Font_Awesome_Provider implements Icon_Provider_Interface {
 
 		foreach ( $icons as $icon ) {
 			$value = $icon['id'];
-			
+
 			if ( $icon['styles'][0] === 'brands' ) {
 				$icon_class = 'fab';
 			} else if ( $icon['styles'][0] === 'solid' ) {

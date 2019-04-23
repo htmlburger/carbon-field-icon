@@ -13,21 +13,7 @@ class Icon_Field extends Predefined_Options_Field {
 	 *
 	 * @var array
 	 */
-	static public $providers = [];
-
-	/**
-	 * Fontawesome option cache
-	 *
-	 * @var array
-	 */
-	private static $fontawesome_options_cache = array();
-
-	/**
-	 * Dashicons option cache
-	 *
-	 * @var array
-	 */
-	private static $dashicons_options_cache = array();
+	public static $providers = [];
 
 	/**
 	 * {@inheritDoc}
@@ -45,19 +31,27 @@ class Icon_Field extends Predefined_Options_Field {
 	public static function admin_enqueue_scripts() {
 		$root_uri = \Carbon_Fields\Carbon_Fields::directory_to_url( \Carbon_Field_Icon\DIR );
 
-		foreach ( static::$providers as $provider_name ) {
-			$provider = \Carbon_Fields\Carbon_Fields::resolve( $provider_name, 'icon_field_providers' );
-
+		foreach ( static::$providers as $provider_name => $provider ) {
 			if ( method_exists( $provider, 'enqueue_assets' ) ) {
 				$provider->enqueue_assets();
 			}
 		}
 
-		// Enqueue field styles.
-		wp_enqueue_style( 'carbon-field-icon', $root_uri . '/build/bundle.css', array(), \Carbon_Field_Icon\VERSION );
+		// Enqueue field styles
+		wp_enqueue_style(
+			'carbon-field-icon',
+			$root_uri . '/build/bundle.css',
+			[],
+			\Carbon_Field_Icon\VERSION
+		);
 
-		// Enqueue field scripts.
-		wp_enqueue_script( 'carbon-field-icon', $root_uri . '/build/bundle.js', array( 'carbon-fields-core' ), \Carbon_Field_Icon\VERSION );
+		// Enqueue field scripts
+		wp_enqueue_script(
+			'carbon-field-icon',
+			$root_uri . '/build/bundle.js',
+			[ 'carbon-fields-core' ],
+			\Carbon_Field_Icon\VERSION
+		);
 	}
 
 	/**
@@ -70,7 +64,7 @@ class Icon_Field extends Predefined_Options_Field {
 			'value'        => '',
 			'name'         => __( 'None', 'carbon-field-icon' ),
 			'class'        => 'fa',
-			'search_terms' => array(),
+			'search_terms' => [],
 		);
 	}
 
@@ -82,28 +76,32 @@ class Icon_Field extends Predefined_Options_Field {
 		$raw_options = parent::get_options();
 
 		if ( empty( $raw_options ) ) {
-			$this->add_provider( 'fontawesome' );
+			$this->add_provider( 'fontawesome' ); // By default, FontAwesome icons are used
 		}
 
-		$raw_options = array_merge( array( $default_option['value'] => $default_option ), $raw_options );
+		$raw_options = array_merge( [
+			$default_option['value'] => $default_option,
+		], $raw_options );
 
-		$options = array();
+		$options = [];
 
 		foreach ( $raw_options as $key => $raw ) {
 			$value = isset( $raw['value'] ) ? $raw['value'] : $key;
-			$option = array(
+			$option = [
 				'value'        => $value,
 				'name'         => isset( $raw['name'] ) ? $raw['name'] : $value,
 				'class'        => isset( $raw['class'] ) ? $raw['class'] : '',
-				'search_terms' => isset( $raw['search_terms'] ) ? $raw['search_terms'] : array(),
-			);
+				'search_terms' => isset( $raw['search_terms'] ) ? $raw['search_terms'] : [],
+			];
 
 			$options[ $value ] = $option;
 		}
 
-		$options = apply_filters( 'carbon_field_icon_options', $options, $this->get_base_name() );
-
-		return $options;
+		return apply_filters(
+			'carbon_field_icon_options',
+			$options,
+			$this->get_base_name()
+		);
 	}
 
 	/**
@@ -150,76 +148,10 @@ class Icon_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function to_json( $load ) {
-		$field_data = parent::to_json( $load );
-
-		$field_data = array_merge( $field_data, array(
-			'value' => $this->get_value(),
-			'options' => array_values( $this->get_options() ),
-		) );
-
-		return $field_data;
-	}
-
-	/**
-	 * Get array of fontawesome options
-	 *
-	 * @return array
-	 */
-	public static function get_fontawesome_options() {
-		if ( empty( static::$fontawesome_options_cache ) ) {
-			$data = json_decode( file_get_contents( \Carbon_Field_Icon\DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'fontawesome.json' ), TRUE );
-
-			foreach ( $data as $icon ) {
-				$value = $icon['id'];
-
-				if ( $icon['styles'][0] === 'brands' ) {
-					$icon_class = 'fab';
-				} else if ( $icon['styles'][0] === 'solid' ) {
-					$icon_class = 'fas';
-				}
-
-				static::$fontawesome_options_cache[ $value ] = array(
-					'value'        => $value,
-					'name'         => $icon['name'],
-					'class'        => "{$icon_class} fa-" . $icon['id'],
-					'search_terms' => $icon['search_terms'],
-				);
-			}
-		}
-
-		return static::$fontawesome_options_cache;
-	}
-
-	/**
 	 * Add all bundled fontawesome options
 	 */
 	public function add_fontawesome_options() {
-		return $this->add_options( static::get_fontawesome_options() );
-	}
-
-	/**
-	 * Get array of dashicon options
-	 *
-	 * @return array
-	 */
-	public static function get_dashicons_options() {
-		if ( empty( static::$dashicons_options_cache ) ) {
-			$data = json_decode( file_get_contents( \Carbon_Field_Icon\DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'dashicons.json' ), TRUE );
-
-			foreach ( $data as $icon ) {
-				$value = $icon['id'];
-				static::$dashicons_options_cache[ $value ] = array(
-					'value'        => $value,
-					'name'         => $icon['name'],
-					'class'        => 'dashicons-before ' . $icon['id'],
-					'search_terms' => $icon['categories'],
-				);
-			}
-		}
-		return static::$dashicons_options_cache;
+		return $this->add_options( static::$providers['fontawesome']->parse_options() );
 	}
 
 	/**
@@ -230,41 +162,41 @@ class Icon_Field extends Predefined_Options_Field {
 	 * @return $this
 	 */
 	public function add_dashicons_options() {
-		return $this->add_options( static::get_dashicons_options() );
+		return $this->add_options( static::$providers['dashicons']->parse_options() );
 	}
 
 	/**
 	 * Adds a new provider.
 	 *
+	 * @static
 	 * @access public
 	 *
-	 * @param  string $name
-	 * @return $this
+	 * @param  array|string $providers
+	 * @return void
 	 */
-	public function add_provider( $providers ) {
+	public static function add_provider( $providers ) {
 		if ( ! is_array( $providers ) ) {
 			$providers = [ $providers ];
 		}
 
-		static::$providers = array_merge( static::$providers, $providers );
-
 		foreach ( $providers as $provider_name ) {
 			$provider = \Carbon_Fields\Carbon_Fields::resolve( $provider_name, 'icon_field_providers' );
 
-			$this->add_options( $provider->parse_options() );
+			static::$providers[ $provider_name ] = $provider;
 		}
-
-		return $this;
 	}
 
 	/**
-	 * Returns all providers.
-	 *
-	 * @access public
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
-	public function get_providers() {
-		return $this->providers;
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
+
+		$field_data = array_merge( $field_data, [
+			'value' => $this->get_value(),
+			'options' => array_values( $this->get_options() ),
+		] );
+
+		return $field_data;
 	}
 }
