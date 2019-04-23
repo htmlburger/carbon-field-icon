@@ -3,10 +3,8 @@
  */
 import { first, filter, some } from 'lodash';
 import cx from 'classnames';
-import { withEffects, toProps } from 'refract-callbag';
-import { Component } from '@wordpress/element';
+import { Component, Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { compose } from '@wordpress/compose';
 
 class IconField extends Component {
 	/**
@@ -19,8 +17,8 @@ class IconField extends Component {
 		searchTerm: '',
 		chosenIcon: null,
 
-		valueClass: 'hidden',
-		availableOptions: []
+		iconClass: '',
+		availableOptions: [],
 	}
 
 	/**
@@ -51,8 +49,11 @@ class IconField extends Component {
 		const { options } = field;
 
 		const availableOptions = filter( options, ( option ) => {
-			const compareTo = [ option.value, option.name ].concat( option.search_terms );
-			const match = some( compareTo, ( metadata ) => metadata.indexOf( this.state.searchTerm ) !== -1 );
+			const compareTo = [ option.value, option.name ]
+				.concat( option.search_terms )
+				.map( ( searchTerm ) => searchTerm.toLowerCase() );
+
+			const match = some( compareTo, ( metadata ) => metadata.indexOf( this.state.searchTerm.toLowerCase() ) !== -1 );
 
 			return match;
 		} );
@@ -64,28 +65,18 @@ class IconField extends Component {
 		} );
 	}
 
+	/**
+	 * Handles document click.
+	 *
+	 * @param  {Event} e
+	 * @return {void}
+	 */
 	handleClick = ( e ) => {
 		if ( this.popup.contains( e.target ) ) {
 			return;
 		}
 
-		this.handleClickOutside();
-	}
-
-	onIconChange = ( value ) => {
-		const { options } = this.props.field;
-
-		let valueObject = first( filter( options, ( option ) => option.value === value ) );
-
-		if ( valueObject && valueObject.value === '' ) {
-			valueObject = null;
-		}
-
-		this.setState( {
-			searchTerm: valueObject ? valueObject.value : '',
-			valueClass: valueObject ? valueObject.class : 'hidden',
-			chosenIcon: valueObject
-		} );
+		this.closeList();
 	}
 
 	/**
@@ -100,19 +91,75 @@ class IconField extends Component {
 		onChange( id, value );
 	}
 
+	/**
+	 * Handles the clear button click.
+	 *
+	 * @param {Event} e
+	 * @return {void}
+	 */
+	handleButtonClearClick = ( e ) => {
+		const { id, onChange } = this.props;
+
+		this.setState( {
+			searchTerm: '',
+			iconClass: '',
+			chosenIcon: null,
+		} );
+
+		onChange( id, '' );
+	}
+
+	/**
+	 * Handles change of the selected icon.
+	 *
+	 * @param  {String} value
+	 * @return {void}
+	 */
+	onIconChange = ( value ) => {
+		const { options } = this.props.field;
+
+		let valueObject = first( filter( options, ( option ) => option.value === value ) );
+
+		if ( valueObject && valueObject.value === '' ) {
+			valueObject = null;
+		}
+
+		this.setState( {
+			searchTerm: valueObject ? valueObject.value : '',
+			iconClass: valueObject ? valueObject.class : '',
+			chosenIcon: valueObject
+		} );
+	}
+
+	/**
+	 * Handles list open event.
+	 *
+	 * @return {void}
+	 */
 	openList = () => {
 		this.setState( {
 			isFocused: true
 		} );
 	}
 
+	/**
+	 * Handles list close event.
+	 *
+	 * @return {void}
+	 */
 	closeList = () => {
 		this.setState( {
 			isFocused: false
 		} );
 	}
 
-	focusInput = ( e ) => {
+	/**
+	 * Handles input focus event.
+	 *
+	 * @param  {Event} e
+	 * @return {void}
+	 */
+	onFocusInput = ( e ) => {
 		e.preventDefault();
 
 		this.setState( {
@@ -122,7 +169,13 @@ class IconField extends Component {
 		this.searchInput.focus();
 	}
 
-	selectOption = ( option ) => {
+	/**
+	 * Handles option select.
+	 *
+	 * @param  {Object} option
+	 * @return {void}
+	 */
+	onOptionSelect = ( option ) => {
 		this.handleChange( option );
 		this.onIconChange( option.value );
 		this.closeList();
@@ -139,12 +192,12 @@ class IconField extends Component {
 		const { options } = field;
 		const searchTerm = e.target.value;
 
-		console.log( (Date.now() % 1000) / 1000 );
-
 		const availableOptions = searchTerm ?
 			filter( options, ( option ) => {
-				const compareTo = [ option.value, option.name ].concat( option.search_terms );
-				const match = some( compareTo, ( metadata ) => metadata.indexOf( searchTerm ) !== -1 );
+				const compareTo = [ option.value, option.name ]
+						.concat( option.search_terms )
+						.map( ( searchTerm ) => searchTerm.toLowerCase() );
+				const match = some( compareTo, ( metadata ) => metadata.indexOf( searchTerm.toLowerCase() ) !== -1 );
 
 				return match;
 			} ) :
@@ -154,10 +207,6 @@ class IconField extends Component {
 			searchTerm,
 			availableOptions
 		} );
-	}
-
-	handleClickOutside() {
-		this.closeList();
 	}
 
 	/**
@@ -177,7 +226,7 @@ class IconField extends Component {
 			onSearchTermChange
 		} = this;
 		const {
-			valueClass,
+			iconClass,
 			isFocused,
 			searchTerm,
 			availableOptions,
@@ -194,11 +243,13 @@ class IconField extends Component {
 				/>
 
 				<div className="cf-icon-preview">
-					<button onClick={ this.focusInput } className="cf-icon-preview__trigger">
-						<i className={ valueClass }></i>
-
-						<span className="cf-icon-preview__trigger-label">{ __( 'Select Icon', 'carbon-field-icon' ) }</span>
-					</button>
+					<div className="cf-icon-preview__canvas">
+						{
+							chosenIcon ?
+							<i className={ iconClass }></i> :
+							<span className="cf-icon-preview__canvas-label">{ __( 'No icon selected', 'carbon-field-icon' ) }</span>
+						}
+					</div>
 
 					<input
 						type="text"
@@ -210,10 +261,10 @@ class IconField extends Component {
 
 				<div className="cf-icon-switcher" ref={ popup => this.popup = popup }>
 					<div className={ cx( {
-							'carbon-icon-search': true,
+							'cf-icon-search': true,
+							'cf-icon-search--focused': isFocused,
 							'dashicons-before': true,
 							'dashicons-search': true,
-							'carbon-icon-search-focus': isFocused
 						} ) }
 					>
 						<input
@@ -221,9 +272,14 @@ class IconField extends Component {
 							onFocus={ openList }
 							onChange={ onSearchTermChange }
 							value={ searchTerm }
+							className="cf-icon-search__input"
 							placeholder={ __( 'Search icon ...', 'carbon-field-icon' ) }
 							ref={ searchInput => this.searchInput = searchInput }
 						/>
+
+						<button type="button" className="cf-icon-search__clear button button-small" onClick={ this.handleButtonClearClick }>
+							{ __( 'Clear', 'carbon-field-icon' ) }
+						</button>
 					</div>
 
 					<div className={ cx( {
@@ -239,7 +295,7 @@ class IconField extends Component {
 										<li key={ option.value } className={ `cf-icon-switcher__options-list__item cf-icon-switcher__options-list__item--${ option.value }` }>
 											<button
 												type="button"
-												onClick={ () => { this.selectOption( option ) } }
+												onClick={ () => { this.onOptionSelect( option ) } }
 												className={ cx( {
 													'active': option.value === value
 												} ) }
@@ -263,32 +319,4 @@ class IconField extends Component {
 	}
 }
 
-/**
- * The function that controls the stream of side-effects.
- *
- * @param  {Object} component
- * @return {Object}
- */
-function aperture( component ) {
-
-}
-
-/**
- * The function that causes the side effects.
- *
- * @param  {Object} props
- * @return {Function}
- */
-function handler( props ) {
-	return function( effect ) {
-		switch ( effect.type ) {
-
-		}
-	};
-}
-
-const applyWithEffects = withEffects( aperture, { handler } );
-
-export default compose(
-	applyWithEffects
-)( IconField );
+export default IconField;

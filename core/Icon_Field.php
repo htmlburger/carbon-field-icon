@@ -55,33 +55,14 @@ class Icon_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Get an array of default options
-	 *
-	 * @return array
-	 */
-	protected function get_default_option() {
-		return array(
-			'value'        => '',
-			'name'         => __( 'None', 'carbon-field-icon' ),
-			'class'        => 'fa',
-			'search_terms' => [],
-		);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public function get_options() {
-		$default_option = $this->get_default_option();
 		$raw_options = parent::get_options();
 
 		if ( empty( $raw_options ) ) {
 			$this->add_provider( 'fontawesome' ); // By default, FontAwesome icons are used
 		}
-
-		$raw_options = array_merge( [
-			$default_option['value'] => $default_option,
-		], $raw_options );
 
 		$options = [];
 

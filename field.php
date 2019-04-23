@@ -25,4 +25,6 @@ Carbon_Fields::instance()->ioc[ 'icon_field_providers']['fontawesome'] = functio
 	return new Font_Awesome_Provider();
 };
 
+Icon_Field::add_provider( [ 'fontawesome', 'dashicons' ] );
+
 do_action( 'carbon_fields_icon_field_loaded' );
