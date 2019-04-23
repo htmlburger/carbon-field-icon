@@ -3,6 +3,7 @@
 namespace Carbon_Field_Icon;
 
 use Carbon_Fields\Field\Predefined_Options_Field;
+use Carbon_Fields\Value_Set\Value_Set;
 
 class Icon_Field extends Predefined_Options_Field {
 	/**
@@ -14,6 +15,25 @@ class Icon_Field extends Predefined_Options_Field {
 	 * @var array
 	 */
 	public static $providers = [];
+
+	/**
+	 * Create a field from a certain type with the specified label.
+	 *
+	 * @access public
+	 *
+	 * @param string $type  Field type
+	 * @param string $name  Field name
+	 * @param string $label Field label
+	 * @return void
+	 */
+	public function __construct( $type, $name, $label ) {
+		$this->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_PROPERTIES, [
+			'provider' => '',
+			'icon'     => '',
+		] ) );
+
+		parent::__construct( $type, $name, $label );
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -55,38 +75,9 @@ class Icon_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function get_options() {
-		$raw_options = parent::get_options();
-
-		if ( empty( $raw_options ) ) {
-			$this->add_provider( 'fontawesome' ); // By default, FontAwesome icons are used
-		}
-
-		$options = [];
-
-		foreach ( $raw_options as $key => $raw ) {
-			$value = isset( $raw['value'] ) ? $raw['value'] : $key;
-			$option = [
-				'value'        => $value,
-				'name'         => isset( $raw['name'] ) ? $raw['name'] : $value,
-				'class'        => isset( $raw['class'] ) ? $raw['class'] : '',
-				'search_terms' => isset( $raw['search_terms'] ) ? $raw['search_terms'] : [],
-			];
-
-			$options[ $value ] = $option;
-		}
-
-		return apply_filters(
-			'carbon_field_icon_options',
-			$options,
-			$this->get_base_name()
-		);
-	}
-
-	/**
 	 * Get option array by it's value.
+	 *
+	 * @access protected
 	 *
 	 * @param  string       $value
 	 * @return array|null
@@ -106,30 +97,77 @@ class Icon_Field extends Predefined_Options_Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function set_value( $value ) {
-		if ( is_array( $value ) && isset( $value['value'] ) ) {
-			$value = $value['value'];
-		}
+	public function get_formatted_value() {
+		$value = $this->get_value();
+		$option_value = $this->get_option_by_value( $value['icon'] );
 
-		return parent::set_value( $value );
+		return $option_value;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function get_formatted_value() {
-		$value           = $this->get_value();
-		$formatted_value = $this->get_option_by_value( $value );
+	public function get_options() {
+		$raw_options = parent::get_options();
 
-		if ( $formatted_value === null ) {
-			$formatted_value = $value;
+		if ( empty( $raw_options ) ) {
+			$this->add_provider( 'fontawesome' ); // By default, FontAwesome icons are used
 		}
 
-		return $formatted_value;
+		$options = [];
+
+		foreach ( $raw_options as $key => $raw ) {
+			$value = isset( $raw['value'] ) ? $raw['value'] : $key;
+			$option = [
+				'value'        => $value,
+				'name'         => isset( $raw['name'] ) ? $raw['name'] : $value,
+				'class'        => isset( $raw['class'] ) ? $raw['class'] : '',
+				'search_terms' => isset( $raw['search_terms'] ) ? $raw['search_terms'] : [],
+				'provider'     => isset( $raw['provider'] ) ? $raw['provider'] : $value,
+			];
+
+			$options[ $value ] = $option;
+		}
+
+		return apply_filters(
+			'carbon_field_icon_options',
+			$options,
+			$this->get_base_name()
+		);
 	}
 
 	/**
-	 * Add all bundled fontawesome options
+	 * {@inheritDoc}
+	 */
+	public function set_value_from_input( $input ) {
+		if ( ! isset( $input[ $this->get_name() ] ) ) {
+			$this->set_value( null );
+			return $this;
+		}
+
+		$value_set = [
+			'provider' => '',
+			'icon'     => '',
+		];
+
+		foreach ( $value_set as $key => $v ) {
+			if ( isset( $input[ $this->get_name() ][ $key ] ) ) {
+				$value_set[ $key ] = $input[ $this->get_name() ][ $key ];
+			}
+		}
+
+		$value_set[ Value_Set::VALUE_PROPERTY ] = $value_set['icon'];
+
+		$this->set_value( $value_set );
+		return $this;
+	}
+
+	/**
+	 * Add all bundled fontawesome options.
+	 *
+	 * @access public
+	 *
+	 * @return $this
 	 */
 	public function add_fontawesome_options() {
 		return $this->add_options( static::$providers['fontawesome']->parse_options() );
@@ -173,8 +211,14 @@ class Icon_Field extends Predefined_Options_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$value_set = $this->get_value();
+
 		$field_data = array_merge( $field_data, [
-			'value' => $this->get_value(),
+			'value'   => [
+				'icon'     => $value_set['icon'],
+				'provider' => $value_set['provider'],
+				'value'    => $value_set[ Value_Set::VALUE_PROPERTY ],
+			],
 			'options' => array_values( $this->get_options() ),
 		] );
 

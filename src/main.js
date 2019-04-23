@@ -58,9 +58,9 @@ class IconField extends Component {
 			return match;
 		} );
 
-		this.onIconChange( value );
+		this.onIconChange( value.value );
 		this.setState( {
-			searchTerm: value,
+			searchTerm: value ? value.icon : '',
 			availableOptions
 		} );
 	}
@@ -85,10 +85,14 @@ class IconField extends Component {
 	 * @param  {Object} option
 	 * @return {void}
 	 */
-	handleChange = ( { value } ) => {
+	handleChange = ( { provider, value } ) => {
 		const { id, onChange } = this.props;
 
-		onChange( id, value );
+		onChange( id, {
+			value: value,
+			provider: provider,
+			icon: value,
+		} );
 	}
 
 	/**
@@ -106,7 +110,11 @@ class IconField extends Component {
 			chosenIcon: null,
 		} );
 
-		onChange( id, '' );
+		onChange( id, {
+			value: '',
+			icon: '',
+			provider: '',
+		} );
 	}
 
 	/**
@@ -178,6 +186,7 @@ class IconField extends Component {
 	onOptionSelect = ( option ) => {
 		this.handleChange( option );
 		this.onIconChange( option.value );
+
 		this.closeList();
 	}
 
@@ -217,10 +226,8 @@ class IconField extends Component {
 	render() {
 		const {
 			name,
-			field,
 			value
 		} = this.props;
-		const { id } = field;
 		const {
 			openList,
 			onSearchTermChange
@@ -237,9 +244,16 @@ class IconField extends Component {
 			<div className="cf-icon-wrapper">
 				<input
 					type="hidden"
-					name={ name }
-					id={ id }
-					value={ value }
+					name={ `${ name }[provider]` }
+					value={ value.provider }
+					readOnly
+				/>
+
+				<input
+					type="hidden"
+					name={ `${ name }[icon]` }
+					value={ value.icon }
+					readOnly
 				/>
 
 				<div className="cf-icon-preview">

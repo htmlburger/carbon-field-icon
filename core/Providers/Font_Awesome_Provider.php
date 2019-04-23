@@ -47,6 +47,7 @@ class Font_Awesome_Provider implements Icon_Provider_Interface {
 				'name'         => $icon['name'],
 				'class'        => "{$icon_class} fa-" . $icon['id'],
 				'search_terms' => $icon['search_terms'],
+				'provider'     => 'fontawesome',
 			);
 		}
 

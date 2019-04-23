@@ -23,6 +23,7 @@ class Dashicons_Provider implements Icon_Provider_Interface {
 				'name'         => $icon['name'],
 				'class'        => 'dashicons-before ' . $icon['id'],
 				'search_terms' => [],
+				'provider'     => 'dashicons',
 			);
 		}
 
