@@ -4,7 +4,24 @@
     "keywords": ["wordpress", "carbon-field", "carbon-field-icon"],
     "type": "library",
     "license": "GPL-2.0+",
-    "authors": [],
+    "authors": [
+        {
+            "name": "htmlBurger",
+            "email": "wordpress@htmlburger.com",
+            "homepage": "https://htmlburger.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "Georgi Stoyanov",
+            "email": "stoyanov.gs@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Atanas Angelov",
+            "email": "atanas.angelov.dev@gmail.com",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "htmlburger/carbon-fields": "^3.0"
     },
