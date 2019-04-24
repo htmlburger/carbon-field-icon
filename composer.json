@@ -10,7 +10,7 @@
     },
     "autoload": {
         "files": [
-            "field.php"
+            "bootstrap.php"
         ],
         "psr-4": {
             "Carbon_Field_Icon\\": "core/"
