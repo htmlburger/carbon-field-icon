@@ -57,10 +57,12 @@ class Icon_Field extends Predefined_Options_Field {
 			}
 		}
 
+		$assets_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 		// Enqueue field styles
 		wp_enqueue_style(
 			'carbon-field-icon',
-			$root_uri . '/build/bundle.css',
+			$root_uri . '/build/bundle' . $assets_suffix . '.css',
 			[],
 			\Carbon_Field_Icon\VERSION
 		);
@@ -68,7 +70,7 @@ class Icon_Field extends Predefined_Options_Field {
 		// Enqueue field scripts
 		wp_enqueue_script(
 			'carbon-field-icon',
-			$root_uri . '/build/bundle.js',
+			$root_uri . '/build/bundle' . $assets_suffix . '.js',
 			[ 'carbon-fields-core' ],
 			\Carbon_Field_Icon\VERSION
 		);
