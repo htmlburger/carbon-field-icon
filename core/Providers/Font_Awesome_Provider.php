@@ -3,7 +3,7 @@
 namespace Carbon_Field_Icon\Providers;
 
 class Font_Awesome_Provider implements Icon_Provider_Interface {
-	const VERSION = '5.5.0';
+	const VERSION = '5.8.1';
 
 	/**
 	 * Enqueue assets in the backend.
@@ -13,7 +13,12 @@ class Font_Awesome_Provider implements Icon_Provider_Interface {
 	 * @return void
 	 */
 	public function enqueue_assets() {
-		wp_enqueue_style( 'fontawesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css', array(), '5.5.0' );
+		wp_enqueue_style(
+			'fontawesome',
+			'//use.fontawesome.com/releases/v' . static::VERSION . '/css/all.css',
+			[],
+			static::VERSION
+		);
 	}
 
 	/**
@@ -30,7 +35,7 @@ class Font_Awesome_Provider implements Icon_Provider_Interface {
 
 		foreach ( $icons as $icon ) {
 			$value = $icon['id'];
-			
+
 			if ( $icon['styles'][0] === 'brands' ) {
 				$icon_class = 'fab';
 			} else if ( $icon['styles'][0] === 'solid' ) {
@@ -42,6 +47,7 @@ class Font_Awesome_Provider implements Icon_Provider_Interface {
 				'name'         => $icon['name'],
 				'class'        => "{$icon_class} fa-" . $icon['id'],
 				'search_terms' => $icon['search_terms'],
+				'provider'     => 'fontawesome',
 			);
 		}
 
