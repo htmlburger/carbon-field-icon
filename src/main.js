@@ -261,7 +261,7 @@ class IconField extends Component {
 						{
 							chosenIcon ?
 							<i className={ iconClass }></i> :
-							<span className="cf-icon-preview__canvas-label">{ __( 'No icon selected', 'carbon-field-icon' ) }</span>
+							<span className="cf-icon-preview__canvas-label">{ __( 'No icon selected', 'carbon-field-icon-ui' ) }</span>
 						}
 					</div>
 
@@ -287,12 +287,12 @@ class IconField extends Component {
 							onChange={ onSearchTermChange }
 							value={ searchTerm }
 							className="cf-icon-search__input"
-							placeholder={ __( 'Search icon ...', 'carbon-field-icon' ) }
+							placeholder={ __( 'Search icon ...', 'carbon-field-icon-ui' ) }
 							ref={ searchInput => this.searchInput = searchInput }
 						/>
 
 						<button type="button" className="cf-icon-search__clear button button-small" onClick={ this.handleButtonClearClick }>
-							{ __( 'Clear', 'carbon-field-icon' ) }
+							{ __( 'Clear', 'carbon-field-icon-ui' ) }
 						</button>
 					</div>
 
@@ -322,7 +322,7 @@ class IconField extends Component {
 									);
 								} ) :
 								<li key="no-results" className="cf-icon-switcher__options-list__item cf-icon-switcher__options-list__item--no-results">
-									{ __( 'No results found', 'carbon-field-icon' ) }
+									{ __( 'No results found', 'carbon-field-icon-ui' ) }
 								</li>
 							}
 						</ul>
