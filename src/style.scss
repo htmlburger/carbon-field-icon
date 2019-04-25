@@ -43,6 +43,10 @@
 	}
 }
 
+.cf-icon-preview__canvas img {
+	width: 64px;
+}
+
 .cf-icon-preview__label {
 	width: 100%;
 	margin: 0;
@@ -121,10 +125,14 @@
 	justify-content: center;
 }
 
-.cf-icon-switcher__options-list i {
+.cf-icon-switcher__options-list i,
+.cf-icon-switcher__options-list img {
 	width: 24px;
-	color: #73777c;
 	margin-bottom: 10px;
+}
+
+.cf-icon-switcher__options-list i {
+	color: #73777c;
 
 	&:before {
 		font-size: 20px;

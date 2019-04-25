@@ -120,13 +120,14 @@ class Icon_Field extends Predefined_Options_Field {
 
 		foreach ( $raw_options as $key => $raw ) {
 			$value = isset( $raw['value'] ) ? $raw['value'] : $key;
-			$option = [
+
+			$option = wp_parse_args( $raw, [
 				'value'        => $value,
-				'name'         => isset( $raw['name'] ) ? $raw['name'] : $value,
-				'class'        => isset( $raw['class'] ) ? $raw['class'] : '',
-				'search_terms' => isset( $raw['search_terms'] ) ? $raw['search_terms'] : [],
-				'provider'     => isset( $raw['provider'] ) ? $raw['provider'] : $value,
-			];
+				'name'         => $value,
+				'class'        => '',
+				'search_terms' => [],
+				'provider'     => 'custom',
+			] );
 
 			$options[ $value ] = $option;
 		}
