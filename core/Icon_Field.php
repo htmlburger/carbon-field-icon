@@ -40,9 +40,13 @@ class Icon_Field extends Predefined_Options_Field {
 	 */
 	public static function field_type_activated() {
 		$dir = \Carbon_Field_Icon\DIR . '/languages/';
+		$domain = 'carbon-field-icon';
+		$domain_ui = 'carbon-field-icon-ui';
 		$locale = get_locale();
-		$path = $dir . $locale . '.mo';
-		load_textdomain( 'carbon-field-icon', $path );
+		$path = $dir . $domain . '-' . $locale . '.mo';
+		$path_ui = $dir . $domain_ui . '-' . $locale . '.mo';
+		load_textdomain( $domain, $path );
+		load_textdomain( $domain_ui, $path_ui );
 	}
 
 	/**
