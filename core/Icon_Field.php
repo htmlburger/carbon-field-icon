@@ -113,7 +113,9 @@ class Icon_Field extends Predefined_Options_Field {
 		$raw_options = parent::get_options();
 
 		if ( empty( $raw_options ) ) {
-			$this->add_provider( 'fontawesome' ); // By default, FontAwesome icons are used
+			$this->add_fontawesome_options(); // By default, FontAwesome icons are used
+
+			$raw_options = parent::get_options();
 		}
 
 		$options = [];
