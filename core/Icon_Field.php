@@ -172,6 +172,22 @@ class Icon_Field extends Predefined_Options_Field {
 	}
 
 	/**
+	 * Adds options from the given provider.
+	 *
+	 * @access public
+	 *
+	 * @param  string $provider
+	 * @return $this
+	 */
+	public function add_provider_options( $provider ) {
+		if ( ! isset( static::$providers[ $provider ] ) ) {
+			throw new \Exception( 'Trying to use non-registered icon provider - ' . $provider );
+		}
+
+		return $this->add_options( static::$providers[ $provider ]->parse_options() );
+	}
+
+	/**
 	 * Add all bundled fontawesome options.
 	 *
 	 * @access public
@@ -179,7 +195,7 @@ class Icon_Field extends Predefined_Options_Field {
 	 * @return $this
 	 */
 	public function add_fontawesome_options() {
-		return $this->add_options( static::$providers['fontawesome']->parse_options() );
+		return $this->add_provider_options( 'fontawesome' );
 	}
 
 	/**
@@ -190,7 +206,7 @@ class Icon_Field extends Predefined_Options_Field {
 	 * @return $this
 	 */
 	public function add_dashicons_options() {
-		return $this->add_options( static::$providers['dashicons']->parse_options() );
+		return $this->add_provider_options( 'dashicons' );
 	}
 
 	/**
