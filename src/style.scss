@@ -13,6 +13,10 @@
 	margin-right: 10px;
 	flex: 0 0 150px;
 
+	.cf-container-widget & {
+		flex: 0 0 100px;
+	}
+
 	@media screen and (max-width: 768px) {
 		flex: 1 0 auto;
 		margin-right: 0;
@@ -29,17 +33,31 @@
 	min-height: 100px;
 	justify-content: center;
 	align-items: center;
+	text-align: center;
+
+	.cf-container-widget & {
+		line-height: 20px;
+		min-height: 60px;
+	}
 }
 
 .cf-icon-preview__canvas i {
 	font-size: 64px;
 	line-height: 100px;
 
+	.cf-container-widget & {
+		line-height: 60px;
+	}
+
 	&.dashicons-before:before {
 		font-size: 64px;
 		line-height: 100px;
 		width: auto;
 		height: auto;
+
+		.cf-container-widget & {
+			line-height: 80px;
+		}
 	}
 }
 
@@ -107,6 +125,15 @@
 		background: #eee;
 	}
 
+	.cf-container-user-meta &,
+	.cf-container-term-meta & {
+		flex: 0 0 25%;
+	}
+
+	.cf-container-widget & {
+		flex: 0 0 33.33333%;
+	}
+
 	@media screen and (max-width: 1400px) {
 		flex: 0 0 25%;
 	}
@@ -171,6 +198,7 @@
 	border-radius: 0;
 	border: 0 !important;
 	box-shadow: none !important;
+	width: auto !important;
 }
 
 .cf-icon-search__clear {
