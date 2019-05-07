@@ -240,6 +240,14 @@ class IconField extends Component {
 			chosenIcon
 		} = this.state;
 
+		let iconPreview;
+
+		if ( chosenIcon && chosenIcon.icon ) {
+			iconPreview = <img src={ chosenIcon.icon } />;
+		} else {
+			iconPreview = <i className={ iconClass } />;
+		}
+
 		return (
 			<div className="cf-icon-wrapper">
 				<input
@@ -259,9 +267,9 @@ class IconField extends Component {
 				<div className="cf-icon-preview">
 					<div className="cf-icon-preview__canvas">
 						{
-							chosenIcon ?
-							<i className={ iconClass }></i> :
-							<span className="cf-icon-preview__canvas-label">{ __( 'No icon selected', 'carbon-field-icon-ui' ) }</span>
+							chosenIcon
+							? iconPreview
+							: <span className="cf-icon-preview__canvas-label">{ __( 'No icon selected', 'carbon-field-icon-ui' ) }</span>
 						}
 					</div>
 
@@ -314,7 +322,11 @@ class IconField extends Component {
 													'active': option.value === value
 												} ) }
 											>
-												<i className={ option.class } dangerouslySetInnerHTML={ { __html: option.contents } }></i>
+												{
+													option.icon ?
+														<img src={ option.icon } className={ option.class } /> :
+														<i className={ option.class } dangerouslySetInnerHTML={ { __html: option.contents } }></i>
+												}
 
 												<span>{ option.name }</span>
 											</button>

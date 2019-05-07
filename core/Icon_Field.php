@@ -40,9 +40,13 @@ class Icon_Field extends Predefined_Options_Field {
 	 */
 	public static function field_type_activated() {
 		$dir = \Carbon_Field_Icon\DIR . '/languages/';
+		$domain = 'carbon-field-icon';
+		$domain_ui = 'carbon-field-icon-ui';
 		$locale = get_locale();
-		$path = $dir . $locale . '.mo';
-		load_textdomain( 'carbon-field-icon', $path );
+		$path = $dir . $domain . '-' . $locale . '.mo';
+		$path_ui = $dir . $domain_ui . '-' . $locale . '.mo';
+		load_textdomain( $domain, $path );
+		load_textdomain( $domain_ui, $path_ui );
 	}
 
 	/**
@@ -113,20 +117,23 @@ class Icon_Field extends Predefined_Options_Field {
 		$raw_options = parent::get_options();
 
 		if ( empty( $raw_options ) ) {
-			$this->add_provider( 'fontawesome' ); // By default, FontAwesome icons are used
+			$this->add_fontawesome_options(); // By default, FontAwesome icons are used
+
+			$raw_options = parent::get_options();
 		}
 
 		$options = [];
 
 		foreach ( $raw_options as $key => $raw ) {
 			$value = isset( $raw['value'] ) ? $raw['value'] : $key;
-			$option = [
+
+			$option = wp_parse_args( $raw, [
 				'value'        => $value,
-				'name'         => isset( $raw['name'] ) ? $raw['name'] : $value,
-				'class'        => isset( $raw['class'] ) ? $raw['class'] : '',
-				'search_terms' => isset( $raw['search_terms'] ) ? $raw['search_terms'] : [],
-				'provider'     => isset( $raw['provider'] ) ? $raw['provider'] : $value,
-			];
+				'name'         => $value,
+				'class'        => '',
+				'search_terms' => [],
+				'provider'     => 'custom',
+			] );
 
 			$options[ $value ] = $option;
 		}
@@ -165,6 +172,22 @@ class Icon_Field extends Predefined_Options_Field {
 	}
 
 	/**
+	 * Adds options from the given provider.
+	 *
+	 * @access public
+	 *
+	 * @param  string $provider
+	 * @return $this
+	 */
+	public function add_provider_options( $provider ) {
+		if ( ! isset( static::$providers[ $provider ] ) ) {
+			throw new \Exception( 'Trying to use non-registered icon provider - ' . $provider );
+		}
+
+		return $this->add_options( static::$providers[ $provider ]->parse_options() );
+	}
+
+	/**
 	 * Add all bundled fontawesome options.
 	 *
 	 * @access public
@@ -172,7 +195,7 @@ class Icon_Field extends Predefined_Options_Field {
 	 * @return $this
 	 */
 	public function add_fontawesome_options() {
-		return $this->add_options( static::$providers['fontawesome']->parse_options() );
+		return $this->add_provider_options( 'fontawesome' );
 	}
 
 	/**
@@ -183,7 +206,7 @@ class Icon_Field extends Predefined_Options_Field {
 	 * @return $this
 	 */
 	public function add_dashicons_options() {
-		return $this->add_options( static::$providers['dashicons']->parse_options() );
+		return $this->add_provider_options( 'dashicons' );
 	}
 
 	/**
