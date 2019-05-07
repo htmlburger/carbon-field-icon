@@ -10,6 +10,8 @@
   border: 1px dashed #ccc;
   margin-right: 10px;
   flex: 0 0 150px; }
+  .cf-container-widget .cf-icon-preview {
+    flex: 0 0 100px; }
   @media screen and (max-width: 768px) {
     .cf-icon-preview {
       flex: 1 0 auto;
@@ -24,16 +26,27 @@
   margin: auto;
   min-height: 100px;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+  text-align: center; }
+  .cf-container-widget .cf-icon-preview__canvas {
+    line-height: 20px;
+    min-height: 60px; }
 
 .cf-icon-preview__canvas i {
   font-size: 64px;
   line-height: 100px; }
+  .cf-container-widget .cf-icon-preview__canvas i {
+    line-height: 60px; }
   .cf-icon-preview__canvas i.dashicons-before:before {
     font-size: 64px;
     line-height: 100px;
     width: auto;
     height: auto; }
+    .cf-container-widget .cf-icon-preview__canvas i.dashicons-before:before {
+      line-height: 80px; }
+
+.cf-icon-preview__canvas img {
+  width: 64px; }
 
 .cf-icon-preview__label {
   width: 100%;
@@ -82,6 +95,11 @@
     text-align: center; }
   .cf-icon-switcher__options-list__item:hover, .cf-icon-switcher__options-list__item--selected {
     background: #eee; }
+  .cf-container-user-meta .cf-icon-switcher__options-list__item,
+  .cf-container-term-meta .cf-icon-switcher__options-list__item {
+    flex: 0 0 25%; }
+  .cf-container-widget .cf-icon-switcher__options-list__item {
+    flex: 0 0 33.33333%; }
   @media screen and (max-width: 1400px) {
     .cf-icon-switcher__options-list__item {
       flex: 0 0 25%; } }
@@ -98,10 +116,13 @@
   align-items: center;
   justify-content: center; }
 
-.cf-icon-switcher__options-list i {
+.cf-icon-switcher__options-list i,
+.cf-icon-switcher__options-list img {
   width: 24px;
-  color: #73777c;
   margin-bottom: 10px; }
+
+.cf-icon-switcher__options-list i {
+  color: #73777c; }
   .cf-icon-switcher__options-list i:before {
     font-size: 20px; }
 
@@ -134,7 +155,8 @@
   line-height: 18px;
   border-radius: 0;
   border: 0 !important;
-  box-shadow: none !important; }
+  box-shadow: none !important;
+  width: auto !important; }
 
 .cf-icon-search__clear {
   margin-right: 5px !important;
