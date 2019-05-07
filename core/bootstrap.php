@@ -13,15 +13,15 @@ Carbon_Fields::extend( Icon_Field::class, function( $container ) {
 	return new Icon_Field( $container['arguments']['type'], $container['arguments']['name'], $container['arguments']['label'] );
 } );
 
-Carbon_Fields::instance()->ioc[ 'icon_field_providers'] = function () {
+Carbon_Fields::instance()->ioc['icon_field_providers'] = function () {
 	return new PimpleContainer();
 };
 
-Carbon_Fields::instance()->ioc[ 'icon_field_providers']['dashicons'] = function( $container ) {
+Carbon_Fields::instance()->ioc['icon_field_providers']['dashicons'] = function( $container ) {
 	return new Dashicons_Provider();
 };
 
-Carbon_Fields::instance()->ioc[ 'icon_field_providers']['fontawesome'] = function( $container ) {
+Carbon_Fields::instance()->ioc['icon_field_providers']['fontawesome'] = function( $container ) {
 	return new Font_Awesome_Provider();
 };
 
