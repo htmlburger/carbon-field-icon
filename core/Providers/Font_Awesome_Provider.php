@@ -3,7 +3,7 @@
 namespace Carbon_Field_Icon\Providers;
 
 class Font_Awesome_Provider implements Icon_Provider_Interface {
-	const VERSION = '5.8.1';
+	const VERSION = '6.4.2';
 
 	/**
 	 * Enqueue assets in the backend.
@@ -40,6 +40,8 @@ class Font_Awesome_Provider implements Icon_Provider_Interface {
 				$icon_class = 'fab';
 			} else if ( $icon['styles'][0] === 'solid' ) {
 				$icon_class = 'fas';
+			} else if ( $icon['styles'][0] === 'regular' ) {
+				$icon_class = 'far';
 			}
 
 			$options[ $value ] = array(
